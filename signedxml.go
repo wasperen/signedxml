@@ -318,10 +318,16 @@ func calculateHash(reference *etree.Element, doc *etree.Document) (string, error
 	doc.WriteSettings.CanonicalAttrVal = true
 
 	h := digestAlgo.New()
-	docBytes, err := doc.WriteToBytes()
-	if err != nil {
-		return "", err
+	var content string
+	for _, contentElement := range doc.ChildElements() {
+		content = content + contentElement.WriteToString()
 	}
+	// docBytes, err := doc.WriteToBytes()
+	// if err != nil {
+	// 	return "", err
+	// }
+
+	docBytes := []byte(content)
 
 	// ioutil.WriteFile("C:/Temp/SignedXML/Suspect.xml", docBytes, 0644)
 	// s, _ := doc.WriteToString()
